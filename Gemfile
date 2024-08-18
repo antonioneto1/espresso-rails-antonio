@@ -39,7 +39,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Use shakapacker to package JavaScript and CSS assets
-gem 'shakapacker', '~> 8.0'
+gem 'shakapacker', '8.0.1'
+
 
 # Use react-rails to use React with Rails
 gem 'react-rails', '~> 3.2', '>= 3.2.1'
