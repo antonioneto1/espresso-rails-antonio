@@ -41,11 +41,13 @@ gem 'devise', '~> 4.8', '>= 4.8.1'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Use shakapacker to package JavaScript and CSS assets
-gem 'shakapacker', '8.0.1'
+gem 'shakapacker', '8.0.0'
 
 
 # Use react-rails to use React with Rails
 gem 'react-rails', '~> 3.2', '>= 3.2.1'
+gem 'bootstrap', '~> 5.3.0'
+gem 'sassc-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

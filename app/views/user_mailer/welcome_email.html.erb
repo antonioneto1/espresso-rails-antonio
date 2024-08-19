@@ -1,0 +1,11 @@
+<h1>Welcome to Our App, <%= @user.name %></h1>
+<p>
+  Your account has been created. You can log in using the following credentials:
+</p>
+<p>
+  Email: <%= @user.email %><br>
+  Password: <%= @user.password %>
+</p>
+<p>
+  <%= link_to 'Login', @url %>
+</p>
