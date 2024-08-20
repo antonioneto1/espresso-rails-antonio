@@ -1,17 +1,13 @@
-# frozen_string_literal: true
-
 class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
     @users = policy_scope(User)
-
     authorize @users
   end
 
   def new
     @companies = Company.all
-
     authorize User
   end
 
@@ -20,6 +16,7 @@ class UsersController < ApplicationController
     authorize User
 
     if @user.save
+      UserMailer.welcome_email(@user, @user.password).deliver_later
       render json: { message: 'User was successfully created' }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity

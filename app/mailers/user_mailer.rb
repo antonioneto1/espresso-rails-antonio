@@ -1,7 +1,9 @@
 class UserMailer < ApplicationMailer
-  def welcome_email
-    @user = params[:user]
-    @url  = 'http://example.com/login'
-    mail(to: @user.email, subject: 'Welcome to Our App')
+  default from: 'no-reply@yourdomain.com'
+
+  def welcome_email(user, password)
+    @user = user
+    @password = password
+    mail(to: @user.email, subject: 'Welcome to Our Platform')
   end
 end

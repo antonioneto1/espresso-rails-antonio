@@ -48,6 +48,7 @@ gem 'shakapacker', '8.0.0'
 gem 'react-rails', '~> 3.2', '>= 3.2.1'
 gem 'bootstrap', '~> 5.3.0'
 gem 'sassc-rails'
+gem 'pundit'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
