@@ -56,6 +56,9 @@ group :development, :test do
 
   # Use rspec-rails for testing
   gem 'rspec-rails', '~> 5.1', '>= 5.1.2'
+  gem "factory_bot", "~> 6.4"
+  gem 'cpf_faker'
+  gem 'faker'
 end
 
 group :development do
@@ -81,3 +84,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
