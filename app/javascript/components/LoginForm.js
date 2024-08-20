@@ -23,7 +23,7 @@ const LoginForm = ({ csrfToken }) => {
       });
 
       if (response.ok) {
-        window.location.href = '/'; // Redirecione para a página inicial ou onde você desejar
+        window.location.href = '/users'; // Redireciona para a página de usuários após o login
       } else {
         const data = await response.json();
         setError(data.error || 'Invalid email or password');

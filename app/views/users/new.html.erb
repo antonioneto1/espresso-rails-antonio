@@ -1,1 +1,1 @@
-<%= react_component('users/NewForm', roles: User::ROLES, companies: @companies, company_id: @current_user.company_id) %>
+<%= react_component('users/NewForm', roles: User.roles.keys, companies: @companies, company_id: @current_user.company_id) %>

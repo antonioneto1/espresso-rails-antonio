@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UserPolicy < ApplicationPolicy
   def index?
     user.admin?
@@ -11,10 +9,12 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.company_id.present?
+      if user.admin?
+        scope.all
+      elsif user.company_id.present?
         scope.where(company_id: user.company_id)
       else
-        scope.all
+        scope.none
       end
     end
   end

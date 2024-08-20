@@ -1,13 +1,17 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def index
     @users = policy_scope(User)
+
     authorize @users
   end
 
   def new
     @companies = Company.all
+
     authorize User
   end
 
@@ -26,6 +30,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :name, :role, :company_id, :password, :password_confirmation)
+    params.require(:user).permit(:email, :name, :role, :company_id)
   end
 end

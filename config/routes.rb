@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   devise_for :users
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   authenticated :user do
     root to: 'statements#index'
@@ -24,7 +23,7 @@ Rails.application.routes.draw do
     patch 'attach_invoice'
   end
 
-  resources :users, only: %i[new create]
+  resources :users, only: %i[index new create]
 
   resources :companies, only: %i[new create] do
     resources :users, only: %i[index]
