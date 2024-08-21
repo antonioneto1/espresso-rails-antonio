@@ -6,7 +6,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import PeopleIcon from '@mui/icons-material/People';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
-import Employees from './users/List';
+import Employees from './users/Employees';
 import StatementPage from './statements/StatementPage';
 import Cartoes from './cards/CardPage'; // Importar o componente Cartoes
 import Categorias from './categories/CategoryPage'; // Importar o componente Categorias
@@ -26,9 +26,10 @@ const Header = ({ user, company }) => {
 
   const fetchOpenStatements = async () => {
     try {
-      const response = await fetch('/statements/open'); // Ajuste a URL conforme necessário
+      const response = await fetch(`/companies/${user.company_id}/statements`);
+      debugger;
       const data = await response.json();
-      setOpenStatements(data.open_statements || []); // Ajuste conforme a estrutura da resposta
+      setOpenStatements(data.open_statements || []);
     } catch (error) {
       console.error('Erro ao buscar despesas abertas:', error);
     }
@@ -36,9 +37,9 @@ const Header = ({ user, company }) => {
 
   const fetchCompletedStatements = async () => {
     try {
-      const response = await fetch('/statements/completed'); // Ajuste a URL conforme necessário
+      const response = await fetch(`/companies/${user.company_id}/statements`); // Ajuste a URL conforme necessário
       const data = await response.json();
-      setCompletedStatements(data.completed_statements || []); // Ajuste conforme a estrutura da resposta
+      setCompletedStatements(data.completed_statements || []);
     } catch (error) {
       console.error('Erro ao buscar despesas completadas:', error);
     }

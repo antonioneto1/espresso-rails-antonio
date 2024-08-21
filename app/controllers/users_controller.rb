@@ -1,27 +1,31 @@
-# frozen_string_literal: true
-
 class UsersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_company
+  before_action :authorize_user, only: %i[index create update]
 
   def index
-    @users = policy_scope(User)
-
+    @users = @company.users.where(role: :employee)
     authorize @users
-  end
-
-  def new
-    @companies = Company.all
-
-    authorize User
+    render json: { employees: @users.as_json(only: [:id, :name, :email]) }
   end
 
   def create
-    @user = User.new(user_params)
-    authorize User
+    @user = @company.users.build(user_params)
+    authorize @user
 
     if @user.save
-      UserMailer.welcome_email(@user, @user.password).deliver_later
-      render json: { message: 'User was successfully created' }, status: :created
+      render json: { message: 'Funcionário cadastrado com sucesso!' }, status: :created
+    else
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    @user = @company.users.find(params[:id])
+    authorize @user
+
+    if @user.update(user_params)
+      render json: { message: 'Funcionário atualizado com sucesso!' }
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
@@ -29,7 +33,15 @@ class UsersController < ApplicationController
 
   private
 
+  def set_company
+    @company = Company.find(current_user.company_id)
+  end
+
+  def authorize_user
+    authorize User
+  end
+
   def user_params
-    params.require(:user).permit(:email, :name, :role, :company_id)
+    params.require(:employee).permit(:name, :email, :role)
   end
 end

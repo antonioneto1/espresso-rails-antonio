@@ -4,32 +4,33 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 
-const CardPage = ({ companyId }) => {
+const CardPage = ({ adminCompanyId }) => {
   const [cards, setCards] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [open, setOpen] = useState(false);
   const [lastDigits, setLastDigits] = useState('');
   const [selectedEmployee, setSelectedEmployee] = useState('');
   const [editIndex, setEditIndex] = useState(null);
+  const token = document.querySelector('meta[name="csrf-token"]').content;
 
   useEffect(() => {
     fetchCards();
     fetchEmployees();
-  }, []);
+  }, [adminCompanyId]);
 
   const fetchCards = async () => {
     try {
-      const response = await fetch(`/companies/${companyId}/cards`);
+      const response = await fetch(`/companies/${adminCompanyId}/cards`);
       const data = await response.json();
       setCards(data.cards);
     } catch (error) {
       console.error('Error fetching cards:', error);
     }
   };
-
+  
   const fetchEmployees = async () => {
     try {
-      const response = await fetch(`/companies/${companyId}/employees`);
+      const response = await fetch(`/companies/${adminCompanyId}/users`);
       const data = await response.json();
       setEmployees(data.employees);
     } catch (error) {
@@ -47,24 +48,29 @@ const CardPage = ({ companyId }) => {
   const handleClose = () => setOpen(false);
 
   const handleSubmit = async () => {
+    if (!lastDigits || !selectedEmployee) {
+      alert('Todos os campos são obrigatórios');
+      return;
+    }
+  
     try {
-      const response = await fetch(`/companies/${companyId}/cards`, {
+      const response = await fetch(`/companies/${adminCompanyId}/cards`, {
         method: editIndex !== null ? 'PATCH' : 'POST',
         headers: {
+          "X-CSRF-Token": token,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           card: {
             last4: lastDigits,
-            employee_id: selectedEmployee,
+            user_id: selectedEmployee,
           },
         }),
       });
-
+  
       const json = await response.json();
-
+  
       if (response.ok) {
-        alert(json.message);
         fetchCards();
         handleClose();
       } else {
@@ -73,7 +79,7 @@ const CardPage = ({ companyId }) => {
     } catch (error) {
       console.error('Error submitting card:', error);
     }
-  };
+  };  
 
   const handleEdit = (index) => {
     const card = cards[index];
@@ -93,7 +99,7 @@ const CardPage = ({ companyId }) => {
         onClick={handleOpen}
         sx={{ position: 'absolute', right: 16, top: 16 }}
       >
-        Adicionar Novo Cartão
+        Cadastrar Cartão
       </Button>
       
       {cards.length === 0 ? (
@@ -110,8 +116,8 @@ const CardPage = ({ companyId }) => {
                 {employees.find(emp => emp.id === card.employee_id)?.name[0] || 'N'}
               </Avatar>
               <ListItemText 
-                primary={<Typography variant="body1" sx={{ fontWeight: 'bold' }}>{employees.find(emp => emp.id === card.employee_id)?.name || 'Desconhecido'}</Typography>} 
-                secondary={<Typography variant="body2" color="textSecondary">Últimos 4 dígitos: {card.last4}</Typography>} 
+                primary={<Typography variant="body1" sx={{ fontWeight: 'bold' }}>{card.name || 'Desconhecido'}</Typography>} 
+                secondary={<Typography variant="body2" color="textSecondary">**** **** **** {card.last4}</Typography>} 
               />
               <IconButton onClick={() => handleEdit(index)}>
                 <EditIcon />
@@ -123,7 +129,7 @@ const CardPage = ({ companyId }) => {
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          {editIndex !== null ? 'Editar Cartão' : 'Adicionar Novo Cartão'}
+          {editIndex !== null ? 'Editar Cartão' : 'Cadastrar Cartão'}
           <IconButton
             aria-label="close"
             onClick={handleClose}

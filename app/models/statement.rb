@@ -11,10 +11,11 @@ class Statement < ApplicationRecord
 
   scope :completed, -> { has_invoice.has_category }
   scope :open, -> { missing_invoice.or(missing_category.left_joins(:invoice_attachment)) }
+
   scope :has_category, -> { where.not(category_id: nil) }
   scope :has_invoice, -> { left_joins(:invoice_attachment).where.not(active_storage_attachments: { id: nil }) }
   scope :missing_invoice, -> { left_joins(:invoice_attachment).where(active_storage_attachments: { id: nil }) }
-  scope :missing_category, -> { where(category_id: nil) }
+  scope :missing_category, -> { where(category_id: nil) }  
 
   default_scope { order(performed_at: :desc) }
 end

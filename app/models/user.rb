@@ -1,5 +1,7 @@
 class User < ApplicationRecord
   belongs_to :company
+  has_one :card
+
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   enum role: { employee: 0, admin: 1 }

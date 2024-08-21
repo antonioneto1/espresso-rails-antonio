@@ -30,7 +30,8 @@ Rails.application.routes.draw do
   resources :users, only: %i[index]
 
   resources :companies, only: %i[new create] do
-    resources :users, only: %i[index]
+    resources :cards, only: %i[index create update]
+    resources :users, only: %i[index create update]
     resources :categories, only: %i[new create]
     resources :statements, only: :index
   end
