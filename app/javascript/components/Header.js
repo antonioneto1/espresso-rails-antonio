@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { AppBar, Box, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -7,10 +7,42 @@ import PeopleIcon from '@mui/icons-material/People';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
 import Employees from './users/List';
+import StatementPage from './statements/StatementPage';
+import Cartoes from './cards/CardPage'; // Importar o componente Cartoes
+import Categorias from './categories/CategoryPage'; // Importar o componente Categorias
 
 const Header = ({ user, company }) => {
   const token = document.querySelector('meta[name="csrf-token"]').content;
   const [selectedOption, setSelectedOption] = useState('Despesas');
+  const [openStatements, setOpenStatements] = useState([]);
+  const [completedStatements, setCompletedStatements] = useState([]);
+
+  useEffect(() => {
+    if (selectedOption === 'Despesas') {
+      fetchOpenStatements();
+      fetchCompletedStatements();
+    }
+  }, [selectedOption]);
+
+  const fetchOpenStatements = async () => {
+    try {
+      const response = await fetch('/statements/open'); // Ajuste a URL conforme necessário
+      const data = await response.json();
+      setOpenStatements(data.open_statements || []); // Ajuste conforme a estrutura da resposta
+    } catch (error) {
+      console.error('Erro ao buscar despesas abertas:', error);
+    }
+  };
+
+  const fetchCompletedStatements = async () => {
+    try {
+      const response = await fetch('/statements/completed'); // Ajuste a URL conforme necessário
+      const data = await response.json();
+      setCompletedStatements(data.completed_statements || []); // Ajuste conforme a estrutura da resposta
+    } catch (error) {
+      console.error('Erro ao buscar despesas completadas:', error);
+    }
+  };
 
   const handleLogout = useCallback(async () => {
     try {
@@ -55,15 +87,21 @@ const Header = ({ user, company }) => {
   const renderContent = () => {
     switch (selectedOption) {
       case 'Despesas':
-        return <Box sx={{ p: 3 }}> {/* Adicione o conteúdo para Despesas aqui */} </Box>;
+        return (
+          <StatementPage
+            user={user}
+            open_statements={openStatements}
+            completed_statements={completedStatements}
+          />
+        );
       case 'Funcionários':
         return <Employees adminCompanyId={user.company_id} />;
       case 'Cartões':
-        return <Box sx={{ p: 3 }}> {/* Adicione o conteúdo para Cartões aqui */} </Box>;
+        return <Cartoes adminCompanyId={user.company_id} />;
       case 'Categorias':
-        return <Box sx={{ p: 3 }}> {/* Adicione o conteúdo para Categorias aqui */} </Box>;
+        return <Categorias adminCompanyId={user.company_id} />;
       default:
-        return <Box sx={{ p: 3 }}> {/* Adicione o conteúdo padrão ou de fallback aqui */} </Box>;
+        return null;
     }
   };
 
@@ -117,7 +155,7 @@ const Header = ({ user, company }) => {
         </Box>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 0, backgroundColor: '#f5f5f5', ml: 240 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 0, backgroundColor: '#f5f5f5', ml: 0 }}>
         <Toolbar /> {/* Espaço para o AppBar */}
         {renderContent()}
       </Box>

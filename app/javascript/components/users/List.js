@@ -26,8 +26,8 @@ const Employees = ({ adminCompanyId }) => {
         name,
         email,
         initials: name.split(' ').map(n => n[0]).join(''),
-        role: 'employee', // Define o role como 'employee'
-        company_id: adminCompanyId // Associa à mesma company do admin
+        role: 'employee',
+        company_id: adminCompanyId
       };
 
       if (editIndex !== null) {
