@@ -8,6 +8,7 @@ class StatementsController < ApplicationController
     @open_statements = policy_scope(Statement.open)
 
     authorize Statement
+    render json: { completed_statements: @completed_statements.map(&:statement_map), open_statements: @open_statements.map(&:statement_map) }
   end
 
   def edit

@@ -4,7 +4,8 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 
-const CategoryPage = () => {
+const CategoryPage = ({ adminCompanyId }) => {
+  const token = document.querySelector('meta[name="csrf-token"]').content;
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
   const [categoryName, setCategoryName] = useState('');
@@ -16,7 +17,7 @@ const CategoryPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/categories');
+      const response = await fetch(`/companies/${adminCompanyId}/categories`);
       const data = await response.json();
       setCategories(data.categories);
     } catch (error) {
@@ -34,12 +35,13 @@ const CategoryPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/categories', {
+      const response = await fetch(`/companies/${adminCompanyId}/categories`, {
         method: editIndex !== null ? 'PATCH' : 'POST',
         headers: {
+          "X-CSRF-Token": token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ category: { name: categoryName } }),
+        body: JSON.stringify({ category: { name: categoryName, company_id: adminCompanyId } }),
       });
 
       const json = await response.json();

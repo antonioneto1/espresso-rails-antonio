@@ -11,7 +11,7 @@ class CategoryPolicy < ApplicationPolicy
 
   class Scope < ApplicationPolicy::Scope
     def resolve
-      scope.where(company: user.company)
+      Category.where(company_id: user.company_id)
     end
   end
 end

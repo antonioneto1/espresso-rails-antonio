@@ -7,7 +7,6 @@ class CardsController < ApplicationController
   def index
     @cards = policy_scope(Card)
     authorize @cards
-    byebug
     render json: { cards: @cards.map(&:card_map) }
   end
 

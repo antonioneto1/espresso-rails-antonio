@@ -17,11 +17,7 @@ Rails.application.routes.draw do
     resources :cards, only: %i[new create]
   end
 
-  namespace 'api' do
-    namespace 'baas' do
-      post 'webhook'
-    end
-  end
+  post 'api/baas/webhooks', to: 'api/baas#webhook'
 
   resources :statements, only: %i[edit update] do
     patch 'attach_invoice'
@@ -32,7 +28,7 @@ Rails.application.routes.draw do
   resources :companies, only: %i[new create] do
     resources :cards, only: %i[index create update]
     resources :users, only: %i[index create update]
-    resources :categories, only: %i[new create]
+    resources :categories, only: %i[index new create]
     resources :statements, only: :index
   end
 end

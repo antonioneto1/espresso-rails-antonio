@@ -18,4 +18,15 @@ class Statement < ApplicationRecord
   scope :missing_category, -> { where(category_id: nil) }  
 
   default_scope { order(performed_at: :desc) }
+
+  def statement_map
+    {
+      id: id,
+      cost: cost.to_f,
+      merchant: merchant,
+      performed_at: performed_at.to_datetime&.strftime('%d/%m/%Y %H:%M'),
+      transaction_id: transaction_id,
+      category_id: category&.name
+    }
+  end
 end

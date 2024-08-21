@@ -3,7 +3,6 @@
 module Cards
   class Build
     def initialize(card_params)
-      byebug
       @card_params = card_params
     end
 

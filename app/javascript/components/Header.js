@@ -27,7 +27,6 @@ const Header = ({ user, company }) => {
   const fetchOpenStatements = async () => {
     try {
       const response = await fetch(`/companies/${user.company_id}/statements`);
-      debugger;
       const data = await response.json();
       setOpenStatements(data.open_statements || []);
     } catch (error) {

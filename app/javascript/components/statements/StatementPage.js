@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import StatementList from "./List";
+import List from "./List"; // Importando o componente correto
 
-const StatementPage = ({ user, open_statements }) => {
+const StatementPage = ({ user, completed_statements = [], open_statements = [] }) => {
   const [view, setView] = useState('lista'); // Estado para controlar a visualização
 
   const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -61,10 +61,7 @@ const StatementPage = ({ user, open_statements }) => {
     { id: 'merchant', label: 'Estabelecimento' },
     { id: 'cost', label: 'Valor', format: /^(.*)(\d{2})$/, mask: "R$ $1,$2" },
     { id: 'performed_at', label: 'Data de Criação' },
-    { id: 'card', label: 'Cartão' },
-    { id: 'invoice', label: 'Comprovante' },
-    { id: 'employee', label: 'Funcionário' },
-    { id: 'category', label: 'Categoria' }
+    { id: 'category_id', label: 'Categoria' }
   ], []);
 
   const renderContent = () => (
@@ -74,8 +71,8 @@ const StatementPage = ({ user, open_statements }) => {
         <button style={buttonStyle} onClick={() => setView('lista')}>Lista</button>
         <button style={buttonStyle} onClick={() => setView('arquivadas')}>Arquivadas</button>
       </div>
-      <StatementList
-        statements={open_statements}
+      <List
+        statements={view === 'lista' ? open_statements : completed_statements}
         columns={columns}
         user={user}
         handleArchive={handleArchive}

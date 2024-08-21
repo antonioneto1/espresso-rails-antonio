@@ -6,6 +6,7 @@ class CategoriesController < ApplicationController
   def index
     @categories = policy_scope(Category)
     authorize @categories
+    render json: { categories: @categories.as_json(only: [:name]) }
   end
 
   def new
@@ -26,6 +27,6 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:name)
+    params.require(:category).permit(:name, :company_id)
   end
 end
