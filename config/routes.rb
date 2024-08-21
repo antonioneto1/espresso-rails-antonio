@@ -1,7 +1,11 @@
-# frozen_string_literal: true
-
+# config/routes.rb
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations' }
+
+  as :user do
+    get 'users/sign_up', to: 'registrations#new', as: :new_user_registration
+    post 'users', to: 'registrations#create', as: :user_registration
+  end
 
   authenticated :user do
     root to: 'statements#index'
@@ -23,7 +27,7 @@ Rails.application.routes.draw do
     patch 'attach_invoice'
   end
 
-  resources :users, only: %i[index new create]
+  resources :users, only: %i[index]
 
   resources :companies, only: %i[new create] do
     resources :users, only: %i[index]

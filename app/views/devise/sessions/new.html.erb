@@ -4,10 +4,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Seu App</title>
-  <%= javascript_pack_tag 'application' %>
+  <title>Espresso Rails Test</title>
 </head>
 <body>
-  <%= react_component('LoginForm', { csrfToken: form_authenticity_token }) %>
+  <%= react_component('sessions/LoginForm', { csrfToken: form_authenticity_token }) %>
 </body>
 </html>
