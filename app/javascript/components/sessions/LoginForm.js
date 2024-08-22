@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TextField, Button, Container, Typography, Paper, Grid, Box } from '@mui/material';
 
 const LoginForm = ({ csrfToken }) => {
   const [email, setEmail] = useState('');
@@ -33,130 +34,74 @@ const LoginForm = ({ csrfToken }) => {
     }
   };
 
-  const styles = {
-    body: {
-      backgroundColor: '#007BFF',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      margin: 0,
-    },
-    loginForm: {
-      backgroundColor: 'white',
-      padding: '20px',
-      borderRadius: '10px',
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-      width: '300px',
-    },
-    h2: {
-      textAlign: 'center',
-      color: '#007BFF',
-    },
-    formGroup: {
-      marginBottom: '15px',
-    },
-    label: {
-      display: 'block',
-      marginBottom: '5px',
-      color: '#333',
-    },
-    input: {
-      borderRadius: '5px',
-      padding: '10px',
-      width: '90%',
-      border: '1px solid #ccc',
-    },
-    error: {
-      color: 'red',
-      fontSize: '14px',
-      marginTop: '10px',
-    },
-    button_login: {
-      backgroundColor: '#007BFF',
-      border: 'none',
-      padding: '10px 20px',
-      borderRadius: '5px',
-      color: 'white',
-      width: '100%',
-      marginTop: '10px',
-      cursor: 'pointer',
-    },
-    button_new: {
-      backgroundColor: '#000',
-      border: 'none',
-      padding: '5px 5px',
-      borderRadius: '5px',
-      color: 'white',
-      width: '100%',
-      marginTop: '10px',
-      cursor: 'pointer',
-    },
-  };
-
   return (
-    <div style={styles.body}>
-      <div style={styles.loginForm}>
-        <h2 style={styles.h2}>Login</h2>
+    <Container 
+      maxWidth="false" 
+      sx={{ 
+        height: '100vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        bgcolor: '#007BFF' 
+      }}
+    >
+      <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, width: '100%', maxWidth: 400 }}>
+        <Typography variant="h4" align="center" sx={{ color: '#007BFF', mb: 2 }}>
+          Login
+        </Typography>
         <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
+          <Box mb={2}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={styles.input}
             />
-          </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="password">Password</label>
-            <input
+          </Box>
+          <Box mb={2}>
+            <TextField
+              label="Password"
               type="password"
-              id="password"
+              variant="outlined"
+              fullWidth
               value={password}
-              maxLength={16}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={styles.input}
+              inputProps={{ maxLength: 16 }}
             />
-          </div>
-          {error && <div style={styles.error}>{error}</div>}
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
-            <button
-              type="submit"
-              style={{
-                backgroundColor: '#007BFF',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '5px',
-                color: 'white',
-                cursor: 'pointer',
-                flex: 1,
-              }}
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              style={{
-                backgroundColor: 'white',
-                border: '1px solid #007BFF',
-                padding: '10px 20px',
-                borderRadius: '5px',
-                color: '#007BFF',
-                cursor: 'pointer',
-                flex: 1,
-              }}
-              onClick={() => window.location.href = '/users/sign_up'}
-            >
-              Criar Conta
-            </button>
-          </div>
+          </Box>
+          {error && (
+            <Typography color="error" variant="body2" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+          )}
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Button 
+                type="submit" 
+                variant="contained" 
+                fullWidth 
+                sx={{ bgcolor: '#007BFF', ':hover': { bgcolor: '#0056b3' } }}
+              >
+                Login
+              </Button>
+            </Grid>
+            <Grid item xs={12} sx={{ mt: 1 }}>
+              <Button 
+                variant="outlined" 
+                fullWidth 
+                sx={{ borderColor: '#007BFF', color: '#007BFF', ':hover': { borderColor: '#0056b3', color: '#0056b3' } }}
+                onClick={() => window.location.href = '/users/sign_up'}
+              >
+                Criar Conta
+              </Button>
+            </Grid>
+          </Grid>
         </form>
-      </div>
-    </div>
+      </Paper>
+    </Container>
   );
 };
 
