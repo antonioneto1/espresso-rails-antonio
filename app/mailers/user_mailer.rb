@@ -1,9 +1,10 @@
 class UserMailer < ApplicationMailer
-  default from: 'no-reply@yourdomain.com'
+  default from: 'suporte@espressoapp.com.br'
 
   def welcome_email(user, password)
     @user = user
     @password = password
-    mail(to: @user.email, subject: 'Welcome to Our Platform')
+    @url = Rails.application.credentials.frontend_url
+    mail(to: @user.email, subject: 'Bem-vindo ao Espresso!')
   end
 end

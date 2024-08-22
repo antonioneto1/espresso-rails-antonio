@@ -27,7 +27,7 @@ class Statement < ApplicationRecord
       performed_at: performed_at.to_datetime&.strftime('%d/%m/%Y %H:%M'),
       transaction_id: transaction_id,
       category_id: category&.name,
-      # status: completed ? 'Comprovada' : 'Não Comprovada'
+      invoice_url: invoice.attached? ? Rails.application.routes.url_helpers.rails_blob_url(invoice, only_path: true) : nil
     }
   end
 end

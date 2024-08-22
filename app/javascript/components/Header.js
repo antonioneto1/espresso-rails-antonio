@@ -8,22 +8,21 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
 import Employees from './users/Employees';
 import StatementPage from './statements/StatementPage';
-import Cartoes from './cards/CardPage'; // Importar o componente Cartoes
-import Categorias from './categories/CategoryPage'; // Importar o componente Categorias
+import Cartoes from './cards/CardPage';
+import Categorias from './categories/CategoryPage';
 import Home from './Home';
 
 const Header = ({ user, company, admin }) => {
   const token = document.querySelector('meta[name="csrf-token"]').content;
-  const [selectedOption, setSelectedOption] = useState('Home'); // Ajuste inicial para Home
-  const [openStatements, setOpenStatements] = useState([]);
-  const [completedStatements, setCompletedStatements] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('Home');
+  const [statements, setStatements] = useState([]);
 
   useEffect(() => {
     if (selectedOption === 'Despesas') {
       fetchStatements();
     }
   }, [selectedOption]);
-  
+
   const fetchStatements = async () => {
     try {
       const response = await fetch(`/companies/${user.company_id}/statements`, {
@@ -33,30 +32,25 @@ const Header = ({ user, company, admin }) => {
           'X-CSRF-Token': token,
         },
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
       }
 
-      const responseText = await response.text();
-      console.log('Resposta bruta:', responseText);
-
-      const data = JSON.parse(responseText);
-  
-      setOpenStatements(data.open_statements || []);
-      setCompletedStatements(data.completed_statements || []);
+      const data = await response.json();
+      setStatements(data.statements || []);
     } catch (error) {
       console.error('Erro ao buscar despesas:', error);
     }
-  };  
+  };
 
   const handleLogout = useCallback(async () => {
     try {
       const response = await fetch(`/users/sign_out`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "X-CSRF-Token": token
+          'X-CSRF-Token': token
         }
       });
 
@@ -64,7 +58,7 @@ const Header = ({ user, company, admin }) => {
         window.location.reload();
       }
     } catch (error) {
-      console.error(error);
+      console.error('Erro ao realizar logout:', error);
     }
   }, [token]);
 
@@ -101,8 +95,7 @@ const Header = ({ user, company, admin }) => {
         return (
           <StatementPage
             user={user}
-            open_statements={openStatements}
-            completed_statements={completedStatements}
+            statements={statements}
           />
         );
       case 'Funcionários':

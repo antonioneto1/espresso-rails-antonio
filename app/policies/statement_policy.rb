@@ -26,7 +26,7 @@ class StatementPolicy < ApplicationPolicy
       if user.admin?
         scope.joins(:company).where(companies: { id: user.company })
       else
-        scope.where(card: user.card)
+        Statement.where(card: user.card)
       end
     end
   end

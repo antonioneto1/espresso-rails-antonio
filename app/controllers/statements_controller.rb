@@ -2,14 +2,23 @@
 
 class StatementsController < ApplicationController
   before_action :authenticate_user!
+  after_action :verify_authorized, except: [:index]
 
   def index
-    @completed_statements = policy_scope(Statement.completed)
-    @open_statements = policy_scope(Statement.open)
+    if current_user.admin?
+      @completed_statements = policy_scope(Statement.completed)
+      @open_statements = policy_scope(Statement.open)
 
-    authorize Statement
-
-    render json: { completed_statements: @completed_statements.map(&:statement_map), open_statements: @open_statements.map(&:statement_map) }
+      render json: {
+        completed_statements: @completed_statements.map(&:statement_map),
+        open_statements: @open_statements.map(&:statement_map)
+      }
+    else
+      @user_statements = policy_scope(Statement)
+      render json: {
+        statements: @user_statements.map(&:statement_map)
+      }
+    end
   end
 
   def edit

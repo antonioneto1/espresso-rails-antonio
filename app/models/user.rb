@@ -14,6 +14,6 @@ class User < ApplicationRecord
   private
 
   def set_password
-    self.password ||= SecureRandom.hex(8)
+    self.password ||= SecureRandom.hex(6)
   end
 end

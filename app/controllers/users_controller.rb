@@ -14,6 +14,8 @@ class UsersController < ApplicationController
     authorize @user
 
     if @user.save
+      generated_password = @user.password
+      UserMailer.welcome_email(@user, generated_password).deliver_later  # Envia o email de boas-vindas
       render json: { message: 'Funcionário cadastrado com sucesso!' }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity

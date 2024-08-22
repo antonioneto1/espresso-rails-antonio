@@ -1,15 +1,13 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React, { useMemo } from 'react';
 
-const CustomTable = (props) => {
-  const { title, columns, rows } = props;
-
+const CustomTable = ({ title, columns, rows }) => {
   const renderHeaders = useMemo(() => (
     columns.map((column) => (
       <TableCell
         key={column.id}
-        align={column.align}
-        style={{ minWidth: column.minWidth }}
+        align={column.align || 'left'}  // Defina um alinhamento padrão
+        style={{ minWidth: column.minWidth || 100 }}  // Defina uma largura mínima padrão
       >
         {column.label}
       </TableCell>
@@ -19,7 +17,7 @@ const CustomTable = (props) => {
   const renderDefaultCell = (column, row) => {
     const value = row[column.id]?.toString() || '';  // Verifique se o valor existe
     return (
-      <TableCell key={column.id} align={column.align}>
+      <TableCell key={column.id} align={column.align || 'left'}>
         {column.mask ? value.replace(column.format, column.mask) : value}
       </TableCell>
     );
@@ -27,11 +25,11 @@ const CustomTable = (props) => {
 
   const renderRows = useMemo(() => (
     rows.map((row) => (
-      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+      <TableRow hover role="checkbox" tabIndex={-1} key={row.id || row.transaction_id || row.key}>
         {
-          columns.map((column) => {
-            return (column.content && column.content(column, row)) || renderDefaultCell(column, row);
-          })
+          columns.map((column) => (
+            (column.content && column.content(column, row)) || renderDefaultCell(column, row)
+          ))
         }
       </TableRow>
     ))

@@ -62,7 +62,7 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
     {
       id: 'comprovacao',
       label: 'Comprovação',
-      content: (row) => row.comprovacao ? <a href={row.comprovacao} target="_blank" rel="noopener noreferrer">Visualizar</a> : 'Sem Comprovação'
+      content: (row) => row.invoice_url ? <a href={row.invoice_url} target="_blank" rel="noopener noreferrer">Visualizar Comprovante</a> : 'Sem Comprovação'
     },
     {
       id: 'actions',

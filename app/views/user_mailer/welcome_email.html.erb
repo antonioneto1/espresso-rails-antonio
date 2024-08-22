@@ -1,11 +1,22 @@
-<h1>Welcome to Our App, <%= @user.name %></h1>
-<p>
-  Your account has been created. You can log in using the following credentials:
-</p>
-<p>
-  Email: <%= @user.email %><br>
-  Password: <%= @user.password %>
-</p>
-<p>
-  <%= link_to 'Login', @url %>
-</p>
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Prezado(a) <%= @user.name %>,</h1>
+    <p>É com grande satisfação que damos as boas-vindas ao Espresso. Estamos felizes em tê-lo(a) como parte da nossa comunidade e esperamos que nossa plataforma atenda todas as suas necessidades de gestão de despesas corporativas.</p>
+
+    <p>Segue abaixo as suas credenciais de acesso ao sistema:</p>
+    <p><strong>URL de acesso:</strong> <%= @url %></p>
+    <p><strong>Usuário:</strong> <%= @user.email %></p>
+    <p><strong>Senha:</strong> <%= @password %></p>
+
+    <p>Acesse o Espresso através do link fornecido.</p>
+    <p>Faça login com o seu usuário e senha.</p>
+
+    <p>Agradecemos a sua confiança e desejamos uma excelente experiência com o Espresso.</p>
+
+    <p>Atenciosamente,</p>
+    <p>❤️ Time do Espresso</p>
+
+    <p>Se tiver alguma dúvida ou precisar de ajuda, entre em contato conosco através do suporte@espressoapp.com.br</p>
+  </body>
+</html>
