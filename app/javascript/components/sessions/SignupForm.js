@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
 
 const SignupForm = ({ csrfToken }) => {
   const [email, setEmail] = useState('');
@@ -146,21 +147,22 @@ const SignupForm = ({ csrfToken }) => {
 
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="cnpj">CNPJ</label>
-            <input
-              type="text"
-              id="cnpj"
+            <InputMask
+              mask="99.999.999/9999-99"
               value={cnpj}
               onChange={(e) => setCnpj(e.target.value)}
               required
               style={styles.input}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
-            />
+            >
+              {(inputProps) => <input id="cnpj" {...inputProps} />}
+            </InputMask>
           </div>
 
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="email">Email</label>
-            <input
+            <InputMask
               type="email"
               id="email"
               value={email}
@@ -194,6 +196,7 @@ const SignupForm = ({ csrfToken }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              maxLength={16}
               style={styles.input}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
@@ -208,6 +211,7 @@ const SignupForm = ({ csrfToken }) => {
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               required
+              maxLength={16}
               style={styles.input}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}

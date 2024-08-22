@@ -116,6 +116,7 @@ const LoginForm = ({ csrfToken }) => {
               type="password"
               id="password"
               value={password}
+              maxLength={16}
               onChange={(e) => setPassword(e.target.value)}
               required
               style={styles.input}
