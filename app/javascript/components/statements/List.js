@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import CustomTable from "../CustomTable";
-import { Button, TableCell, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton, MenuItem, Select, InputLabel, FormControl, Typography } from "@mui/material";
+import { Button, TableCell, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Select, InputLabel, FormControl, Typography, Box } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
 const List = ({ statements, columns, user, handleArchive, handleEdit, categories }) => {
@@ -72,7 +72,7 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
   ]), [columns, user.role, adminActions, employeeActions]);
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <Box sx={{ overflowX: 'auto' }}>
       <CustomTable columns={columnsWithActions} rows={statements} />
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>
@@ -80,7 +80,7 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
           <IconButton
             aria-label="close"
             onClick={handleCloseDialog}
-            style={{ position: 'absolute', right: 8, top: 8 }}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
           >
             <Edit />
           </IconButton>
@@ -93,7 +93,7 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
               onChange={(e) => setCategory(e.target.value)}
               error={!!error}
               renderValue={(selected) => (
-                <Typography>{categories.find(cat => cat.id === selected)?.name || 'Selecionar Categoria'}</Typography>
+                <Typography variant="body1">{categories.find(cat => cat.id === selected)?.name || 'Selecionar Categoria'}</Typography>
               )}
             >
               {categories.map((cat) => (
@@ -108,7 +108,7 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
             component="label"
             variant="contained"
             size="small"
-            style={{ marginTop: 20 }}
+            sx={{ mt: 2 }}
           >
             Upload Comprovante
             <input
@@ -117,18 +117,18 @@ const List = ({ statements, columns, user, handleArchive, handleEdit, categories
               onChange={(e) => setFile(e.target.files[0])}
             />
           </Button>
-          {file && <Typography>{file.name}</Typography>}
+          {file && <Typography variant="body2" sx={{ mt: 1 }}>{file.name}</Typography>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button onClick={handleCloseDialog} color="secondary">
             Cancelar
           </Button>
-          <Button onClick={handleSaveChanges} color="primary">
+          <Button onClick={handleSaveChanges} color="primary" variant="contained">
             Salvar
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 };
 

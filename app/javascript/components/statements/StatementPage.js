@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 import List from "./List"; // Importando o componente correto
 
 const StatementPage = ({ user, statements = [] }) => {
   const [categories, setCategories] = useState([]);
-
   const token = document.querySelector('meta[name="csrf-token"]').content;
 
   useEffect(() => {
@@ -77,8 +77,8 @@ const StatementPage = ({ user, statements = [] }) => {
   ];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: 'auto' }}>
-      <h2>Minhas Despesas</h2>
+    <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', maxWidth: '1200px', margin: 'auto' }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>Despesas</Typography>
       <List
         statements={statements}
         columns={columns}
@@ -87,7 +87,7 @@ const StatementPage = ({ user, statements = [] }) => {
         handleEdit={handleEdit}
         categories={categories} // Passando as categorias para o List
       />
-    </div>
+    </Box>
   );
 };
 

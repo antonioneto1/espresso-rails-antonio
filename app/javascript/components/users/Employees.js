@@ -82,11 +82,10 @@ const Employees = ({ adminCompanyId }) => {
   };
 
   return (
-    <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', overflow: 'visible' }}>
-      <Typography variant="h4">Funcionários</Typography>
+    <Box sx={{ p: 3, minHeight: '100vh', position: 'relative' }}>
+      <Typography variant="h4" gutterBottom>Funcionários</Typography>
       <Button 
         variant="contained" 
-        color="primary" 
         startIcon={<AddIcon />} 
         onClick={handleOpen}
         sx={{ position: 'absolute', right: 16, top: 16 }}
@@ -103,12 +102,14 @@ const Employees = ({ adminCompanyId }) => {
         ) : (
           employees.map((employee, index) => (
             <ListItem key={employee.id} sx={{ borderBottom: '1px solid #e0e0e0' }}>
-              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>{employee.name.split(' ').map(n => n[0]).join('')}</Avatar>
+              <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+                {employee.name.split(' ').map(n => n[0]).join('')}
+              </Avatar>
               <ListItemText 
                 primary={<Typography variant="body1" sx={{ fontWeight: 'bold' }}>{employee.name}</Typography>} 
                 secondary={<Typography variant="body2" color="textSecondary">{employee.email}</Typography>} 
               />
-              <IconButton onClick={() => handleEdit(index)}>
+              <IconButton onClick={() => handleEdit(index)} edge="end">
                 <EditIcon />
               </IconButton>
             </ListItem>
@@ -122,7 +123,7 @@ const Employees = ({ adminCompanyId }) => {
           <IconButton
             aria-label="close"
             onClick={handleClose}
-            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
           >
             <CloseIcon />
           </IconButton>
@@ -156,7 +157,7 @@ const Employees = ({ adminCompanyId }) => {
           <Button onClick={handleClose} color="secondary">
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} color="primary" variant="contained">
+          <Button onClick={handleSubmit} variant="contained" color="primary">
             {editIndex !== null ? 'Salvar' : 'Cadastrar'}
           </Button>
         </DialogActions>

@@ -7,7 +7,7 @@ const CustomTable = ({ title, columns, rows }) => {
       <TableCell
         key={column.id}
         align={column.align || 'left'}  // Defina um alinhamento padrão
-        style={{ minWidth: column.minWidth || 100 }}  // Defina uma largura mínima padrão
+        sx={{ minWidth: column.minWidth || 100 }}  // Use sx para o estilo
       >
         {column.label}
       </TableCell>
@@ -36,7 +36,7 @@ const CustomTable = ({ title, columns, rows }) => {
   ), [rows, columns]);
 
   return (
-    <React.Fragment>
+    <>
       <h2>{title}</h2>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -52,7 +52,7 @@ const CustomTable = ({ title, columns, rows }) => {
           </Table>
         </TableContainer>
       </Paper>
-    </React.Fragment>
+    </>
   );
 };
 

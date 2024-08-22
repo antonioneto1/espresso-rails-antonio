@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { AppBar, Box, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { AppBar, Box, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PeopleIcon from '@mui/icons-material/People';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
+import MenuIcon from '@mui/icons-material/Menu'; // Adicione esse ícone
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // Adicione esse ícone
 import Employees from './users/Employees';
 import StatementPage from './statements/StatementPage';
 import Cartoes from './cards/CardPage';
@@ -16,6 +18,7 @@ const Header = ({ user, company, admin }) => {
   const token = document.querySelector('meta[name="csrf-token"]').content;
   const [selectedOption, setSelectedOption] = useState('Home');
   const [statements, setStatements] = useState([]);
+  const [open, setOpen] = useState(true); // Estado para controlar o menu
 
   useEffect(() => {
     if (selectedOption === 'Despesas') {
@@ -113,6 +116,13 @@ const Header = ({ user, company, admin }) => {
     <Box sx={{ display: 'flex', height: '100vh' }}>
       <AppBar position="fixed" sx={{ backgroundColor: '#007BFF', height: 56, zIndex: 1201 }}>
         <Toolbar sx={{ minHeight: 'unset', px: 2 }}>
+          <IconButton
+            color="inherit"
+            onClick={() => setOpen(!open)}
+            sx={{ mr: 2 }}
+          >
+            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+          </IconButton>
           <Typography variant="h6" component="div">
             Espresso - {company.name}
           </Typography>
@@ -122,21 +132,23 @@ const Header = ({ user, company, admin }) => {
 
       <Drawer
         variant="permanent"
+        open={open}
         sx={{
-          width: 240,
+          width: open ? 240 : 60, // Ajusta a largura do menu
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
-            width: 240,
+            width: open ? 240 : 60,
             boxSizing: 'border-box',
             backgroundColor: '#007BFF',
             color: '#fff',
+            transition: 'width 0.3s', // Adiciona uma animação para a transição
           },
         }}
       >
         <Toolbar />
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Toolbar sx={{ px: 2 }}>
-            <Typography variant="h6">Espresso</Typography>
+            <Typography variant="h6" noWrap={true}>Espresso</Typography>
           </Toolbar>
           <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
             <List>
@@ -151,7 +163,7 @@ const Header = ({ user, company, admin }) => {
                   <ListItemIcon sx={{ color: '#fff' }}>
                     {item.icon}
                   </ListItemIcon>
-                  <ListItemText primary={item.text} />
+                  {open && <ListItemText primary={item.text} />}
                 </ListItem>
               ))}
             </List>

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, List, ListItem, ListItemText, Typography, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, List as MUIList, ListItem, ListItemText, Typography, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
@@ -85,7 +85,7 @@ const CategoryPage = ({ adminCompanyId }) => {
           <hr style={{ border: '1px solid #e0e0e0', margin: '8px 0', width: '80%' }} />
         </Typography>
       ) : (
-        <List>
+        <MUIList>
           {categories.map((category, index) => (
             <ListItem key={index} sx={{ borderBottom: '1px solid #e0e0e0' }}>
               <ListItemText 
@@ -96,7 +96,7 @@ const CategoryPage = ({ adminCompanyId }) => {
               </IconButton>
             </ListItem>
           ))}
-        </List>
+        </MUIList>
       )}
 
       <Dialog open={open} onClose={handleClose}>
