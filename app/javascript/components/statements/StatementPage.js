@@ -1,10 +1,25 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import List from "./List"; // Importando o componente correto
 
 const StatementPage = ({ user, completed_statements = [], open_statements = [] }) => {
-  const [view, setView] = useState('lista'); // Estado para controlar a visualização
+  const [view, setView] = useState(user.role === 'admin' ? 'lista' : 'comprovadas'); // Estado para controlar a visualização
+  const [categories, setCategories] = useState([]);
 
   const token = document.querySelector('meta[name="csrf-token"]').content;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`/companies/${user.company_id}/categories`);
+        const json = await response.json();
+        setCategories(json.categories || []);
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, [user.company_id]);
 
   const handleArchive = useCallback(async (id) => {
     try {
@@ -30,20 +45,22 @@ const StatementPage = ({ user, completed_statements = [], open_statements = [] }
     }
   }, [token]);
 
-  const handleAttach = useCallback(async (event, id) => {
-    const file = event.target.files[0];
+  const handleEdit = useCallback(async (id, category, file) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('category_id', category);
+    if (file) formData.append('file', file);
 
     try {
-      const response = await fetch(`/statements/${id}/attach_invoice.json`, {
+      const response = await fetch(`/statements/${id}`, {
         method: "PATCH",
         headers: { "X-CSRF-Token": token },
         body: formData
       });
 
+      const json = await response.json();
+
       if (response.status === 200) {
-        alert('Anexado com sucesso');
+        alert('Despesa atualizada com sucesso');
         window.location.reload();
       } else {
         alert('Tente novamente mais tarde');
@@ -52,10 +69,6 @@ const StatementPage = ({ user, completed_statements = [], open_statements = [] }
       console.error(error);
     }
   }, [token]);
-
-  const handleSetCategory = useCallback((id) => {
-    window.location.href = `/statements/${id}/edit`;
-  }, []);
 
   const columns = useMemo(() => [
     { id: 'merchant', label: 'Estabelecimento' },
@@ -68,16 +81,26 @@ const StatementPage = ({ user, completed_statements = [], open_statements = [] }
     <React.Fragment>
       <h2>Despesas</h2>
       <div style={{ marginBottom: '16px' }}>
-        <button style={buttonStyle} onClick={() => setView('lista')}>Lista</button>
-        <button style={buttonStyle} onClick={() => setView('arquivadas')}>Arquivadas</button>
+        {user.role === 'admin' && (
+          <>
+            <button style={buttonStyle} onClick={() => setView('lista')}>Lista</button>
+            <button style={buttonStyle} onClick={() => setView('arquivadas')}>Arquivadas</button>
+          </>
+        )}
+        {user.role === 'employee' && (
+          <>
+            <button style={buttonStyle} onClick={() => setView('comprovadas')}>Comprovadas</button>
+            <button style={buttonStyle} onClick={() => setView('nao_comprovadas')}>Não Comprovadas</button>
+          </>
+        )}
       </div>
       <List
-        statements={view === 'lista' ? open_statements : completed_statements}
+        statements={user.role === 'admin' ? (view === 'lista' ? open_statements : completed_statements) : (view === 'comprovadas' ? completed_statements : open_statements)}
         columns={columns}
         user={user}
         handleArchive={handleArchive}
-        handleAttach={handleAttach}
-        handleSetCategory={handleSetCategory}
+        handleEdit={handleEdit}
+        categories={categories} // Passando as categorias para o List
       />
     </React.Fragment>
   );

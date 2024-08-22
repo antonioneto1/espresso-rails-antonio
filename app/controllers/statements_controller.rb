@@ -8,6 +8,7 @@ class StatementsController < ApplicationController
     @open_statements = policy_scope(Statement.open)
 
     authorize Statement
+
     render json: { completed_statements: @completed_statements.map(&:statement_map), open_statements: @open_statements.map(&:statement_map) }
   end
 
@@ -22,8 +23,7 @@ class StatementsController < ApplicationController
     @statement = Statement.find(params[:id])
 
     authorize @statement
-
-    if @statement.update(permitted_attributes(@statement))
+    if @statement.update(statement_update_params) && @statement.invoice.attach(attach_invoice_params[:file])
       render json: { message: 'Statement was updated' }
     else
       render json: { errors: @statement.errors.full_messages }, status: :unprocessable_entity
@@ -45,6 +45,10 @@ class StatementsController < ApplicationController
   end
 
   private
+
+  def statement_update_params
+    params.permit(:category_id, :archived)
+  end
 
   def attach_invoice_params
     params.permit(:file)

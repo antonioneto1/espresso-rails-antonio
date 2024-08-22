@@ -26,7 +26,8 @@ class Statement < ApplicationRecord
       merchant: merchant,
       performed_at: performed_at.to_datetime&.strftime('%d/%m/%Y %H:%M'),
       transaction_id: transaction_id,
-      category_id: category&.name
+      category_id: category&.name,
+      # status: completed ? 'Comprovada' : 'Não Comprovada'
     }
   end
 end

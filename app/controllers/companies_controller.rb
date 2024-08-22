@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class CompaniesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user! , except: %i[index show]
+
+  def index
+  end
 
   def new
     authorize Company

@@ -10,39 +10,46 @@ import Employees from './users/Employees';
 import StatementPage from './statements/StatementPage';
 import Cartoes from './cards/CardPage'; // Importar o componente Cartoes
 import Categorias from './categories/CategoryPage'; // Importar o componente Categorias
+import Home from './Home';
 
-const Header = ({ user, company }) => {
+const Header = ({ user, company, admin }) => {
   const token = document.querySelector('meta[name="csrf-token"]').content;
-  const [selectedOption, setSelectedOption] = useState('Despesas');
+  const [selectedOption, setSelectedOption] = useState('Home'); // Ajuste inicial para Home
   const [openStatements, setOpenStatements] = useState([]);
   const [completedStatements, setCompletedStatements] = useState([]);
 
   useEffect(() => {
     if (selectedOption === 'Despesas') {
-      fetchOpenStatements();
-      fetchCompletedStatements();
+      fetchStatements();
     }
   }, [selectedOption]);
-
-  const fetchOpenStatements = async () => {
+  
+  const fetchStatements = async () => {
     try {
-      const response = await fetch(`/companies/${user.company_id}/statements`);
-      const data = await response.json();
+      const response = await fetch(`/companies/${user.company_id}/statements`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': token,
+        },
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+      }
+
+      const responseText = await response.text();
+      console.log('Resposta bruta:', responseText);
+
+      const data = JSON.parse(responseText);
+  
       setOpenStatements(data.open_statements || []);
-    } catch (error) {
-      console.error('Erro ao buscar despesas abertas:', error);
-    }
-  };
-
-  const fetchCompletedStatements = async () => {
-    try {
-      const response = await fetch(`/companies/${user.company_id}/statements`); // Ajuste a URL conforme necessário
-      const data = await response.json();
       setCompletedStatements(data.completed_statements || []);
     } catch (error) {
-      console.error('Erro ao buscar despesas completadas:', error);
+      console.error('Erro ao buscar despesas:', error);
     }
-  };
+  };  
 
   const handleLogout = useCallback(async () => {
     try {
@@ -75,9 +82,11 @@ const Header = ({ user, company }) => {
 
   const menuItems = [
     { text: 'Despesas', icon: <ReceiptIcon />, link: `/companies/${user.company_id}/statements` },
-    { text: 'Funcionários', icon: <PeopleIcon />, link: `/companies/${user.company_id}/users` },
-    { text: 'Cartões', icon: <CreditCardIcon />, link: `/users/${user.id}/cards/new` },
-    { text: 'Categorias', icon: <CategoryIcon />, link: `/companies/${user.company_id}/categories` }
+    ...(admin ? [
+      { text: 'Funcionários', icon: <PeopleIcon />, link: `/companies/${user.company_id}/users` },
+      { text: 'Cartões', icon: <CreditCardIcon />, link: `/users/${user.id}/cards/new` },
+      { text: 'Categorias', icon: <CategoryIcon />, link: `/companies/${user.company_id}/categories` }
+    ] : [])
   ];
 
   const handleMenuItemClick = (itemText) => {
@@ -86,6 +95,8 @@ const Header = ({ user, company }) => {
 
   const renderContent = () => {
     switch (selectedOption) {
+      case 'Home':
+        return <Home />;
       case 'Despesas':
         return (
           <StatementPage

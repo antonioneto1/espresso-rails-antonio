@@ -1,5 +1,6 @@
 # config/routes.rb
 Rails.application.routes.draw do
+  get 'home/index'
   devise_for :users, controllers: { registrations: 'registrations' }
 
   as :user do
@@ -8,10 +9,12 @@ Rails.application.routes.draw do
   end
 
   authenticated :user do
-    root to: 'statements#index'
+    root to: 'home#index', as: :authenticated_root
   end
 
-  root to: redirect("/users/sign_in")
+  unauthenticated do
+    root to: redirect('/users/sign_in')
+  end
 
   scope 'users/:user_id' do
     resources :cards, only: %i[new create]
@@ -25,7 +28,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[index]
 
-  resources :companies, only: %i[new create] do
+  resources :companies, only: %i[new create index] do
     resources :cards, only: %i[index create update]
     resources :users, only: %i[index create update]
     resources :categories, only: %i[index new create]

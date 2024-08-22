@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
   def index
     @categories = policy_scope(Category)
     authorize @categories
-    render json: { categories: @categories.as_json(only: [:name]) }
+    render json: { categories: @categories.as_json(only: [:name ,:id]) }
   end
 
   def new

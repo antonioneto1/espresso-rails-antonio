@@ -11,7 +11,7 @@
   </head>
 
   <body>
-    <%= react_component('Header', user: @current_user, company: @current_user.company) if @current_user %>
+    <%= react_component('Header', user: @current_user, company: @current_user.company, admin: @current_user.admin?) if @current_user %>
     <%= yield %>
   </body>
 </html>
