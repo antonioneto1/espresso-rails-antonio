@@ -90,7 +90,7 @@ const CardPage = ({ adminCompanyId }) => {
   };
 
   return (
-    <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', overflow: 'visible' }}>
+    <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', maxWidth: '1200px', margin: 'auto' }}>
       <Typography variant="h4">Cartões</Typography>
       <Button 
         variant="contained" 

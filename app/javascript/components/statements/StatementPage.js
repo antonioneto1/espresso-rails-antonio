@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
-import List from "./List"; // Importando o componente correto
+import { Box, Typography, Tabs, Tab } from "@mui/material";
+import List from "./List"; // Certifique-se de que o caminho esteja correto
 
-const StatementPage = ({ user, statements = [] }) => {
+const StatementPage = ({ user, statements = [], completedStatements = [], openStatements = [] }) => {
   const [categories, setCategories] = useState([]);
+  const [showArchived, setShowArchived] = useState(false); // Estado para alternar entre ativas e arquivadas
   const token = document.querySelector('meta[name="csrf-token"]').content;
 
   useEffect(() => {
@@ -44,6 +45,30 @@ const StatementPage = ({ user, statements = [] }) => {
     }
   }, [token]);
 
+  const handleUnarchive = useCallback(async (id) => {
+    try {
+      const response = await fetch(`/statements/${id}`, {
+        method: "PATCH",
+        headers: {
+          "X-CSRF-Token": token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ statement: { archived: false } })
+      });
+
+      const json = await response.json();
+
+      if (response.status === 200) {
+        alert(json.message);
+        window.location.reload();
+      } else {
+        alert(json.errors);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [token]);
+
   const handleEdit = useCallback(async (id, category, file) => {
     const formData = new FormData();
     formData.append('category_id', category);
@@ -69,6 +94,10 @@ const StatementPage = ({ user, statements = [] }) => {
     }
   }, [token]);
 
+  const handleTabChange = (event, newValue) => {
+    setShowArchived(newValue === 1);
+  };
+
   const columns = [
     { id: 'merchant', label: 'Estabelecimento' },
     { id: 'cost', label: 'Valor', format: /^(.*)(\d{2})$/, mask: "R$ $1,$2" },
@@ -76,16 +105,25 @@ const StatementPage = ({ user, statements = [] }) => {
     { id: 'category_id', label: 'Categoria' }
   ];
 
+  const relevantStatements = showArchived ? completedStatements : openStatements;
+
   return (
     <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', maxWidth: '1200px', margin: 'auto' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>Despesas</Typography>
+      <Tabs value={showArchived ? 1 : 0} onChange={handleTabChange} aria-label="abas de despesas">
+        <Tab label="Lista" />
+        <Tab label="Arquivadas" />
+      </Tabs>
       <List
-        statements={statements}
+        statements={relevantStatements}
+        completedStatements={completedStatements}
+        openStatements={openStatements}
         columns={columns}
         user={user}
         handleArchive={handleArchive}
+        handleUnarchive={handleUnarchive}
         handleEdit={handleEdit}
-        categories={categories} // Passando as categorias para o List
+        categories={categories}
       />
     </Box>
   );

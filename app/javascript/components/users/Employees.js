@@ -82,7 +82,7 @@ const Employees = ({ adminCompanyId }) => {
   };
 
   return (
-    <Box sx={{ p: 3, minHeight: '100vh', position: 'relative' }}>
+    <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', maxWidth: '1200px', margin: 'auto' }}>
       <Typography variant="h4" gutterBottom>Funcionários</Typography>
       <Button 
         variant="contained" 
@@ -92,7 +92,7 @@ const Employees = ({ adminCompanyId }) => {
       >
         Cadastrar Novo Funcionário
       </Button>
-      <List>
+      <List sx={{ width: '100%', maxWidth: 2080 }}>
         {employees.length === 0 ? (
           <Typography variant="body1" sx={{ textAlign: 'center', mt: 4 }}>
             Até o momento, não há funcionários cadastrados.

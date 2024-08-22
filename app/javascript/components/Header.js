@@ -18,7 +18,9 @@ const Header = ({ user, company, admin }) => {
   const token = document.querySelector('meta[name="csrf-token"]').content;
   const [selectedOption, setSelectedOption] = useState('Home');
   const [statements, setStatements] = useState([]);
-  const [open, setOpen] = useState(true); // Estado para controlar o menu
+  const [completedStatements, setCompletedStatements] = useState([]);
+  const [openStatements, setOpenStatements] = useState([]);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     if (selectedOption === 'Despesas') {
@@ -43,6 +45,8 @@ const Header = ({ user, company, admin }) => {
 
       const data = await response.json();
       setStatements(data.statements || []);
+      setCompletedStatements(data.completed_statements || []);
+      setOpenStatements(data.open_statements || []);
     } catch (error) {
       console.error('Erro ao buscar despesas:', error);
     }
@@ -99,6 +103,8 @@ const Header = ({ user, company, admin }) => {
           <StatementPage
             user={user}
             statements={statements}
+            completedStatements={completedStatements}
+            openStatements={openStatements}
           />
         );
       case 'Funcionários':

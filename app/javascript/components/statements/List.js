@@ -3,7 +3,7 @@ import CustomTable from "../CustomTable";
 import { Button, TableCell, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Select, InputLabel, FormControl, Typography, Box } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 
-const List = ({ statements, columns, user, handleArchive, handleEdit, categories }) => {
+const List = ({ statements, completedStatements, openStatements, columns, user, handleArchive, handleEdit, categories }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStatement, setSelectedStatement] = useState(null);
   const [category, setCategory] = useState('');
