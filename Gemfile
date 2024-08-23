@@ -57,6 +57,7 @@ group :development, :test do
   # Use rspec-rails for testing
   gem 'rspec-rails', '~> 5.1', '>= 5.1.2'
   gem "factory_bot", "~> 6.4"
+  gem 'factory_bot_rails'
   gem 'cpf_faker'
   gem 'faker'
 end
@@ -79,6 +80,7 @@ end
 
 group :test do
   # Use simplecov to track test coverage
+  gem 'shoulda-matchers'
   gem 'simplecov', '~> 0.22.0', require: false
 end
 

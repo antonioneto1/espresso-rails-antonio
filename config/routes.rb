@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     resources :cards, only: %i[index create update]
     resources :users, only: %i[index create update]
     resources :categories, only: %i[index new create]
-    resources :statements, only: %i[index archived_list]
+    resources :statements, only: %i[edit update index] do
+      patch 'attach_invoice'
+      get 'archived_list', on: :collection
+    end
   end
 end

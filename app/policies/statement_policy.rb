@@ -22,7 +22,7 @@ class StatementPolicy < ApplicationPolicy
   end
 
   def archived_list?
-    user.admin?
+    true
   end
 
   class Scope < ApplicationPolicy::Scope

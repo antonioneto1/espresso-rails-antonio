@@ -14,7 +14,7 @@ RSpec.describe 'UsersController' do
         user: {
           name: Faker::Name.name,
           email: Faker::Internet.unique.email,
-          role: User::ROLES.keys.sample,
+          role: User.roles.keys.sample,
           company_id: company.id
         }
       }

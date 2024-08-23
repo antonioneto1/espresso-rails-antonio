@@ -2,11 +2,20 @@
 
 FactoryBot.define do
   factory :statement do
-    performed_at { Faker::Time.backward }
-    cost { Faker::Number.between(from: 0, to: 10_000_000) }
+    cost { Faker::Commerce.price }
     merchant { Faker::Company.name }
-    transaction_id { Faker::Alphanumeric.unique.alphanumeric(number: 15) }
-    category { nil }
-    card
+    performed_at { Faker::Date.backward(days: 30) }
+    transaction_id { Faker::Number.unique.number(digits: 10) }
+    category
+    card { create(:card, company: company) }
+    company { card.company }
+
+    trait :archived do
+      archived { true }
+    end
+
+    trait :active do
+      archived { false }
+    end
   end
 end

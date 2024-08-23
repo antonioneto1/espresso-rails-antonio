@@ -7,7 +7,7 @@ RSpec.describe 'BaasController' do
 
   before { sign_in(user) }
 
-  describe 'POST /api/baas/webhook' do
+  describe 'POST /api/baas/webhooks' do
     let!(:card) { create(:card, last4: '1234') }
     let(:params) do
       {
@@ -20,13 +20,13 @@ RSpec.describe 'BaasController' do
     end
 
     it 'returns http created' do
-      post('/api/baas/webhook', params: params)
+      post('/api/baas/webhooks', params: params)
 
       expect(response).to have_http_status(:created)
     end
 
     it 'saves statement', :aggregate_failures do
-      expect { post('/api/baas/webhook', params: params) }.to change(Statement, :count).by(1)
+      expect { post('/api/baas/webhooks', params: params) }.to change(Statement, :count).by(1)
       expect(Statement.last.attributes).to include(
         {
           'merchant' => 'Uber *UBER *TRIP',
