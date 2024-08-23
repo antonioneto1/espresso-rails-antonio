@@ -6,8 +6,8 @@ const CustomTable = ({ title, columns, rows }) => {
     columns.map((column) => (
       <TableCell
         key={column.id}
-        align={column.align || 'left'}  // Defina um alinhamento padrão
-        sx={{ minWidth: column.minWidth || 100 }}  // Use sx para o estilo
+        align={column.align || 'left'}
+        sx={{ minWidth: column.minWidth || 100 }}
       >
         {column.label}
       </TableCell>
@@ -15,7 +15,7 @@ const CustomTable = ({ title, columns, rows }) => {
   ), [columns]);
 
   const renderDefaultCell = (column, row) => {
-    const value = row[column.id]?.toString() || '';  // Verifique se o valor existe
+    const value = row[column.id]?.toString() || '';
     return (
       <TableCell key={column.id} align={column.align || 'left'}>
         {column.mask ? value.replace(column.format, column.mask) : value}

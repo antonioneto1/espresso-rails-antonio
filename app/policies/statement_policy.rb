@@ -21,6 +21,10 @@ class StatementPolicy < ApplicationPolicy
     end
   end
 
+  def archived_list?
+    user.admin?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.admin?

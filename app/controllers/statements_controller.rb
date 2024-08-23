@@ -6,19 +6,27 @@ class StatementsController < ApplicationController
 
   def index
     if current_user.admin?
-      @completed_statements = policy_scope(Statement.completed)
-      @open_statements = policy_scope(Statement.open)
+      @completed_statements = policy_scope(Statement.archived)
+      @open_statements = policy_scope(Statement.active)
 
       render json: {
         completed_statements: @completed_statements.map(&:statement_map),
         open_statements: @open_statements.map(&:statement_map)
       }
     else
-      @user_statements = policy_scope(Statement)
+      @user_statements = policy_scope(Statement.active)
       render json: {
         statements: @user_statements.map(&:statement_map)
       }
     end
+  end
+
+  def archived_list
+    @archived_statements = policy_scope(Statement.archived)
+
+    render json: {
+      archived_statements: @archived_statements.map(&:statement_map)
+    }
   end
 
   def edit
@@ -32,7 +40,7 @@ class StatementsController < ApplicationController
     @statement = Statement.find(params[:id])
 
     authorize @statement
-    if @statement.update(statement_update_params) && @statement.invoice.attach(attach_invoice_params[:file])
+    if @statement.update(statement_update_params) || @statement.invoice.attach(attach_invoice_params[:file])
       render json: { message: 'Statement was updated' }
     else
       render json: { errors: @statement.errors.full_messages }, status: :unprocessable_entity

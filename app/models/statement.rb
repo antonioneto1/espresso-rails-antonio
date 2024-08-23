@@ -15,7 +15,9 @@ class Statement < ApplicationRecord
   scope :has_category, -> { where.not(category_id: nil) }
   scope :has_invoice, -> { left_joins(:invoice_attachment).where.not(active_storage_attachments: { id: nil }) }
   scope :missing_invoice, -> { left_joins(:invoice_attachment).where(active_storage_attachments: { id: nil }) }
-  scope :missing_category, -> { where(category_id: nil) }  
+  scope :missing_category, -> { where(category_id: nil) }
+  scope :archived, -> { where(archived: true) }
+  scope :active, -> { where(archived: false) }
 
   default_scope { order(performed_at: :desc) }
 
@@ -27,7 +29,11 @@ class Statement < ApplicationRecord
       performed_at: performed_at.to_datetime&.strftime('%d/%m/%Y %H:%M'),
       transaction_id: transaction_id,
       category_id: category&.name,
-      invoice_url: invoice.attached? ? Rails.application.routes.url_helpers.rails_blob_url(invoice, only_path: true) : nil
+      archived: archived,
+      employee: card.user.name,
+      card: card.last4,
+      invoice_url: invoice.attached? ? Rails.application.routes.url_helpers.rails_blob_url(invoice, only_path: true) : nil,
+      status: invoice.attached? && category.present? ? 'Comprovada' : 'Não comprovada'
     }
   end
 end

@@ -1,10 +1,10 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Box, Typography, Tabs, Tab } from "@mui/material";
-import List from "./List"; // Certifique-se de que o caminho esteja correto
+import List from "./List";
 
 const StatementPage = ({ user, statements = [], completedStatements = [], openStatements = [] }) => {
   const [categories, setCategories] = useState([]);
-  const [showArchived, setShowArchived] = useState(false); // Estado para alternar entre ativas e arquivadas
+  const [showArchived, setShowArchived] = useState(false);
   const token = document.querySelector('meta[name="csrf-token"]').content;
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const StatementPage = ({ user, statements = [], completedStatements = [], openSt
           "X-CSRF-Token": token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ statement: { archived: true } })
+        body: JSON.stringify({ archived: true })
       });
 
       const json = await response.json();
@@ -53,7 +53,7 @@ const StatementPage = ({ user, statements = [], completedStatements = [], openSt
           "X-CSRF-Token": token,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ statement: { archived: false } })
+        body: JSON.stringify({ archived: false  })
       });
 
       const json = await response.json();
@@ -101,19 +101,24 @@ const StatementPage = ({ user, statements = [], completedStatements = [], openSt
   const columns = [
     { id: 'merchant', label: 'Estabelecimento' },
     { id: 'cost', label: 'Valor', format: /^(.*)(\d{2})$/, mask: "R$ $1,$2" },
-    { id: 'performed_at', label: 'Data de Criação' },
-    { id: 'category_id', label: 'Categoria' }
+    { id: 'performed_at', label: 'Data de criação' },
+    { id: 'card', label: 'Cartão' },
+    { id: 'status', label: 'Comprovação' }
   ];
 
-  const relevantStatements = showArchived ? completedStatements : openStatements;
+  const relevantStatements = user?.role === 'admin'
+    ? (showArchived ? completedStatements : openStatements)
+    : statements;
 
   return (
     <Box sx={{ p: 3, position: 'relative', minHeight: '100vh', maxWidth: '1200px', margin: 'auto' }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>Despesas</Typography>
+    <Typography variant="h4" sx={{ mb: 2 }}>Despesas</Typography>
+    {user?.role === 'admin' && (
       <Tabs value={showArchived ? 1 : 0} onChange={handleTabChange} aria-label="abas de despesas">
         <Tab label="Lista" />
         <Tab label="Arquivadas" />
       </Tabs>
+    )}
       <List
         statements={relevantStatements}
         completedStatements={completedStatements}

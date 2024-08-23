@@ -3,11 +3,12 @@ import { AppBar, Box, IconButton, Toolbar, Typography, Drawer, List, ListItem, L
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import Stack from '@mui/material/Stack';
 import PeopleIcon from '@mui/icons-material/People';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CategoryIcon from '@mui/icons-material/Category';
-import MenuIcon from '@mui/icons-material/Menu'; // Adicione esse ícone
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; // Adicione esse ícone
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Employees from './users/Employees';
 import StatementPage from './statements/StatementPage';
 import Cartoes from './cards/CardPage';
@@ -71,10 +72,15 @@ const Header = ({ user, company, admin }) => {
 
   const renderLogout = useMemo(() => (
     <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
-      <Typography sx={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-        <AccountCircleIcon sx={{ marginRight: '5px' }} />
-        {user.email}
-      </Typography>
+      <Stack direction="column" sx={{display: 'flex', alignItems: 'right'}}>
+        <Typography>
+          Espresso App
+        </Typography>
+        <Typography sx={{ marginRight: '10px', display: 'flex', alignItems: 'center' }}>
+        <AccountCircleIcon sx={{ marginRight: '7px'}} />
+          {user.email}
+        </Typography>
+      </Stack>
       <IconButton onClick={handleLogout} color="inherit">
         <LogoutIcon />
       </IconButton>
@@ -120,14 +126,14 @@ const Header = ({ user, company, admin }) => {
 
   return (
     <Box sx={{ display: 'flex', height: '100vh' }}>
-      <AppBar position="fixed" sx={{ backgroundColor: '#007BFF', height: 56, zIndex: 1201 }}>
+      <AppBar position="fixed" sx={{ backgroundColor: '#007BFF', height: 66, zIndex: 2000, boxShadow: 0 }}>
         <Toolbar sx={{ minHeight: 'unset', px: 2 }}>
           <IconButton
             color="inherit"
             onClick={() => setOpen(!open)}
             sx={{ mr: 2 }}
           >
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+            {open ? <MenuIcon /> : <MenuIcon />}
           </IconButton>
           <Typography variant="h6" component="div">
             Espresso - {company.name}
@@ -140,21 +146,19 @@ const Header = ({ user, company, admin }) => {
         variant="permanent"
         open={open}
         sx={{
-          width: open ? 240 : 60, // Ajusta a largura do menu
+          width: open ? 240 : 60,
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
             width: open ? 240 : 60,
             boxSizing: 'border-box',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            transition: 'width 0.3s', // Adiciona uma animação para a transição
+            color: '#000000',
+            transition: 'width 0.3s',
           },
         }}
       >
         <Toolbar />
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Toolbar sx={{ px: 2 }}>
-            <Typography variant="h6" noWrap={true}>Espresso</Typography>
           </Toolbar>
           <Box sx={{ flexGrow: 1, overflow: 'auto' }}>
             <List>
@@ -164,9 +168,9 @@ const Header = ({ user, company, admin }) => {
                   key={item.text}
                   onClick={() => handleMenuItemClick(item.text)}
                   selected={selectedOption === item.text}
-                  sx={{ color: '#fff' }}
+                  sx={{ color: '#000000' }}
                 >
-                  <ListItemIcon sx={{ color: '#fff' }}>
+                  <ListItemIcon sx={{ color: '#000000' }}>
                     {item.icon}
                   </ListItemIcon>
                   {open && <ListItemText primary={item.text} />}
