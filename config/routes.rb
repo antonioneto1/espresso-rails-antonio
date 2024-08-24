@@ -8,6 +8,9 @@ Rails.application.routes.draw do
     post 'users', to: 'registrations#create', as: :user_registration
   end
 
+  get 'login', to: 'sessions#new', as: :login
+  post 'login', to: 'sessions#create'
+
   authenticated :user do
     root to: 'home#index', as: :authenticated_root
   end
@@ -33,8 +36,9 @@ Rails.application.routes.draw do
     resources :users, only: %i[index create update]
     resources :categories, only: %i[index new create]
     resources :statements, only: %i[edit update index] do
-      patch 'attach_invoice'
-      get 'archived_list', on: :collection
+      patch :attach_invoice
+      post :archived, on: :member
+      get :archived_list, on: :collection
     end
   end
 end

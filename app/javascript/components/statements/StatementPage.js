@@ -23,8 +23,8 @@ const StatementPage = ({ user, statements = [], completedStatements = [], openSt
 
   const handleArchive = useCallback(async (id) => {
     try {
-      const response = await fetch(`/statements/${id}`, {
-        method: "PATCH",
+      const response = await fetch(`/statements/archived/${id}`, {
+        method: "POST",
         headers: {
           "X-CSRF-Token": token,
           "Content-Type": "application/json"
@@ -47,8 +47,8 @@ const StatementPage = ({ user, statements = [], completedStatements = [], openSt
 
   const handleUnarchive = useCallback(async (id) => {
     try {
-      const response = await fetch(`/statements/${id}`, {
-        method: "PATCH",
+      const response = await fetch(`/statements/archived/${id}`, {
+        method: "POST",
         headers: {
           "X-CSRF-Token": token,
           "Content-Type": "application/json"

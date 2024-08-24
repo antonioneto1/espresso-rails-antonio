@@ -61,10 +61,22 @@ class StatementsController < ApplicationController
     end
   end
 
+  def archived
+    @statement = Statement.find(params[:id])
+
+    authorize @statement
+
+    if @statement.update(archived: params[:archived])
+      render json: { message: 'Statement was updated' }
+    else
+      render json: { errors: @statement.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def statement_update_params
-    params.permit(:category_id, :archived)
+    params.permit(:category_id)
   end
 
   def attach_invoice_params

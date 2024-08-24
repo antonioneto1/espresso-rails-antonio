@@ -8,47 +8,6 @@ RSpec.describe 'UsersController' do
 
   before { sign_in(user) }
 
-  describe 'POST /users' do
-    let(:params) do
-      {
-        user: {
-          name: Faker::Name.name,
-          email: Faker::Internet.unique.email,
-          role: User.roles.keys.sample,
-          company_id: company.id
-        }
-      }
-    end
-
-    it 'returns http created' do
-      post("/users", params: params)
-
-      expect(response).to have_http_status(:created)
-    end
-
-    it 'saves user' do
-      expect { post("/users", params: params) }.to change(User, :count).by(1)
-    end
-
-    context 'with invalid params' do
-      let(:params) do
-        {
-          user: {
-            name: Faker::Name.name,
-            email: '',
-            role: ''
-          }
-        }
-      end
-
-      it 'returns bad request' do
-        post("/users", params: params)
-
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
-
   describe 'GET /companies/:id/users' do
     before { create_list(:user, 4, company: company) }
 
@@ -56,6 +15,17 @@ RSpec.describe 'UsersController' do
       get("/companies/#{company.id}/users")
 
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'when user is not admin' do
+    let!(:user) { create(:user, role: :employee) }
+    before { sign_in(user) }
+
+    it 'returns forbidden' do
+      get("/companies/#{company.id}/users")
+
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end

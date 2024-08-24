@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :name, presence: true
+  validates :company, presence: true, if: -> { employee? }
 
   before_validation :set_password, on: :create
 

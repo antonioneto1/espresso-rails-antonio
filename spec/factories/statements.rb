@@ -6,9 +6,7 @@ FactoryBot.define do
     merchant { Faker::Company.name }
     performed_at { Faker::Date.backward(days: 30) }
     transaction_id { Faker::Number.unique.number(digits: 10) }
-    category
-    card { create(:card, company: company) }
-    company { card.company }
+    card
 
     trait :archived do
       archived { true }

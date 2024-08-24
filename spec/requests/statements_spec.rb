@@ -2,9 +2,12 @@ require 'rails_helper'
 
 RSpec.describe StatementsController, type: :controller do
   let(:company) { create(:company) }
+  let(:another_company) { create(:company) }
   let(:admin) { create(:user, :admin, company: company) }
   let(:employee) { create(:user, :employee, company: company) }
   let(:card) { create(:card, user: employee, company: company) }
+  let(:another_card) { create(:card, company: another_company) }
+  let(:another_employee) { create(:user, :employee, company: another_company) }
   let(:statement) { create(:statement, card: card) }
 
   before do
@@ -37,21 +40,19 @@ RSpec.describe StatementsController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
-    before do
-      sign_in admin
-    end
-
+  describe "POST #archived" do
     it "updates the statement when authorized" do
-      put :update, params: { company_id: company.id, id: statement.id, archived: true }
+      sign_in admin
+      post :archived, params: { company_id: company.id, id: statement.id, archived: true }
       expect(response).to have_http_status(:success)
       expect(statement.reload.archived).to be_truthy
     end
 
-    it "does not update the statement when not authorized" do
+    it "does not archived the statement when employee" do
       sign_in employee
-      put :update, params: { company_id: company.id, id: statement.id, archived: true }
-      expect(response).to have_http_status(:forbidden)
+
+      post :archived, params: { company_id: company.id, id: statement.id, archived: true }
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
@@ -77,7 +78,7 @@ RSpec.describe StatementsController, type: :controller do
       end
 
       it "does not allow attaching the invoice" do
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
         expect(statement.reload.invoice.attached?).to be_falsey
       end
     end
