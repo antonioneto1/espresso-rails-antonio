@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   class BaasController < ApplicationController
     skip_after_action :verify_authorized
