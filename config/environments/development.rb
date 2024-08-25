@@ -63,11 +63,11 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp-mail.outlook.com',
+    address:              ENV['SMTP_ADDRESS'],
     port:                 587,
-    domain:               'antonio.com',
-    user_name:            'antoniocavalcante1910@hotmail.com',
-    password:             '191091Tony#',
+    domain:               ENV['SMTP_DOMAIN'],
+    user_name:            ENV['SMTP_USER_NAME'],
+    password:             ENV['SMTP_PASSWORD'],
     authentication:       'plain',
     enable_starttls_auto: true
   }
