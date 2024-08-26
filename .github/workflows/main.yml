@@ -1,0 +1,91 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: mysql2://root:@127.0.0.1/espresso-rails-test_test
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DB: espresso-rails-test_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7.8'
+        bundler-cache: false
+
+    - name: Cache gems
+      uses: actions/cache@v3
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Update RubyGems
+      run: |
+        gem install rubygems-update -v 3.3.22
+        update_rubygems
+        gem --version
+
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install --path vendor/bundle
+
+    - name: Install Node dependencies
+      run: npm install
+
+    - name: Run Rubocop
+      run: |
+        bundle exec rubocop
+
+    - name: Setup Database
+      run: |
+        RAILS_ENV=test bundle exec rails db:setup
+
+    - name: Run RSpec
+      run: |
+        bundle exec rspec
+
+    - name: Run Jest
+      run: npm run test
+
+    - name: Simplecov Report
+      uses: joshmfrankel/simplecov-check-action@main
+      with:
+        minimum_suite_coverage: 99
+        minimum_file_coverage: 99
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup LCOV
+      uses: hrishikesh-kadam/setup-lcov@v1
+    - name: LCOV Report
+      uses: zgosalvez/github-actions-report-lcov@v3
+      with:
+        coverage-files: coverage/lcov.info
+        minimum-coverage: 99
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        update-comment: true
