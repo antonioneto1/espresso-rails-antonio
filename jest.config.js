@@ -1,4 +1,5 @@
 module.exports = {
   testEnvironment: 'jest-environment-jsdom',
-  setupFilesAfterEnv: ['@testing-library/jest-dom']
+  setupFilesAfterEnv: ['@testing-library/jest-dom'],
+  testPathIgnorePatterns: ['/vendor/'],
 };
