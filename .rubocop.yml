@@ -6,7 +6,54 @@ require:
 
 AllCops:
   TargetRubyVersion: 2.7.8
+  SuggestExtensions: false
   NewCops: enable
 
 Style/Documentation:
   Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+  # Maximum: 20
+
+Metrics/LineLength:
+  Enabled: false
+  # Maximum: 120
+
+Metrics/BlockLength:
+  Enabled: false
+  # Maximum: 30
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+  
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+RSpec/RepeatedExample:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+

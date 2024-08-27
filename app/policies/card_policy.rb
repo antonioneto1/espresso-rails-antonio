@@ -1,5 +1,6 @@
-class CardPolicy < ApplicationPolicy
+# frozen_string_literal: true
 
+class CardPolicy < ApplicationPolicy
   def index?
     user.admin?
   end

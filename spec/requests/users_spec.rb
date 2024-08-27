@@ -20,6 +20,7 @@ RSpec.describe 'UsersController' do
 
   describe 'when user is not admin' do
     let!(:user) { create(:user, role: :employee) }
+
     before { sign_in(user) }
 
     it 'returns forbidden' do

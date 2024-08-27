@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   belongs_to :company
-  has_one :card
+  has_one :card, dependent: :destroy
 
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 

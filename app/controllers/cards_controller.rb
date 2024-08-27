@@ -3,8 +3,8 @@
 class CardsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_company
-  before_action :set_card, only: [:show, :update, :destroy]
-  before_action :authorize_card, only: [:update, :destroy]
+  before_action :set_card, only: %i[update]
+  before_action :authorize_card, only: %i[update destroy]
 
   def index
     @cards = policy_scope(Card)

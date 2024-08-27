@@ -32,7 +32,10 @@ class Statement < ApplicationRecord
       archived: archived,
       employee: card.user.name,
       card: card.last4,
-      invoice_url: invoice.attached? ? Rails.application.routes.url_helpers.rails_blob_url(invoice, only_path: true) : nil,
+      invoice_url: if invoice.attached?
+                     Rails.application.routes.url_helpers.rails_blob_url(invoice,
+                                                                         only_path: true)
+                   end,
       status: invoice.attached? && category.present? ? 'Comprovada' : 'Não comprovada'
     }
   end

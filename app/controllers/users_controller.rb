@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def index
     @users = @company.users.where(role: :employee)
     authorize @users
-    render json: { employees: @users.as_json(only: [:id, :name, :email]) }
+    render json: { employees: @users.as_json(only: %i[id name email]) }
   end
 
   def create

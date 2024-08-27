@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     self.class.ancestors.include?(DeviseController)
   end
 
-  def after_sign_in_path_for(resource)
+  def after_sign_in_path_for(_resource)
     home_index_path
   end
 end
