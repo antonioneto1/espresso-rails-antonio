@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Statements', type: :request do
+RSpec.describe 'Statements' do
   let(:company) { create(:company) }
   let(:admin) { create(:user, :admin, company: company) }
   let(:employee) { create(:user, :employee, company: company) }

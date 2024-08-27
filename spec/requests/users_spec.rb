@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Users', type: :request do
+RSpec.describe 'Users' do
   let!(:user) { create(:user, role: :admin) }
   let!(:company) { create(:company) }
 

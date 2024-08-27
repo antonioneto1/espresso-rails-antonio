@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Companies', type: :request do
+RSpec.describe 'Companies' do
   let(:user) { create(:user, role: :admin) }
 
   before { sign_in(user) }
