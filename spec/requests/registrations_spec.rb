@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Registrations' do
@@ -42,9 +44,9 @@ RSpec.describe 'Registrations' do
   describe 'POST /users' do
     context 'with valid parameters' do
       it 'creates a new user and company' do
-        expect {
+        expect do
           post user_registration_path, params: valid_user_params
-        }.to change(User, :count).by(1).and change(Company, :count).by(1)
+        end.to change(User, :count).by(1).and change(Company, :count).by(1)
 
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq('Conta criada com sucesso!')

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Categories' do
   let(:user) { create(:user, role: :admin) }
   let(:company) { create(:company) }
-  let!(:category) { create(:category, company: company) }
+  let(:category) { create(:category, company: company) }
 
   before do
     sign_in user
@@ -18,7 +18,7 @@ RSpec.describe 'Categories' do
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to eq('application/json')
 
-      json_response = JSON.parse(response.body)
+      json_response = response.parsed_body
       expect(json_response['categories']).to be_an(Array)
       expect(json_response['categories'].first).to include('name', 'id') if json_response['categories'].any?
     end
@@ -39,12 +39,12 @@ RSpec.describe 'Categories' do
       end
 
       it 'creates a new category' do
-        expect {
+        expect do
           post company_categories_path(company_id: company.id), params: valid_params
-        }.to change(Category, :count).by(1)
+        end.to change(Category, :count).by(1)
 
-        expect(response).to have_http_status(200)
-        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        json_response = response.parsed_body
         expect(json_response['message']).to eq('Category was successfully created.')
       end
     end
@@ -61,7 +61,7 @@ RSpec.describe 'Categories' do
 
       it 'does not create a new category' do
         expect(response).to have_http_status(:unprocessable_entity)
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
         expect(json_response['errors']).to include("Name can't be blank")
       end
     end
